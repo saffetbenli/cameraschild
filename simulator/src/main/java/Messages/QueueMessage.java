@@ -5,6 +5,12 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 import rabbitmq.RabbitConfig;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.StringWriter;
+import java.time.LocalDateTime;
+
 @Component
 public class QueueMessage implements MessageSender {
     private String cameraQueue;
@@ -15,13 +21,19 @@ public class QueueMessage implements MessageSender {
     }
 
     @Override
-    public void sendMessage(CameraMessage cameraMessage) {
+    public void sendMessage(CameraMessage cameraMessage) throws JAXBException {
         try {
-            while(true){
-                rabbitTemplate.convertAndSend(RabbitConfig.getTopicExchangeName(), "licence", cameraMessage);
-            }
+            JAXBContext context = JAXBContext.newInstance(CameraMessage.class);
+            Marshaller m = context.createMarshaller();
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            StringWriter sw = new StringWriter();
+            m.marshal(cameraMessage, sw);
+            String cameraMessgeXml = sw.toString();
+            System.out.println("Sent message to queue " + LocalDateTime.now());
+            rabbitTemplate.convertAndSend(RabbitConfig.getTopicExchangeName(), "licence", cameraMessage);
         } catch (Exception e) {
-            System.out.println("Error marshalling file be.kdg.processor.message to XML." + e);
+            System.out.println("Message is niet op queue gezet!" + e);
         }
     }
 }
+

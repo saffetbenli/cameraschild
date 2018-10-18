@@ -42,7 +42,6 @@ public class FileGenerator implements LicensePlateGenerator{
                     }
                 }
                 i++;
-
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

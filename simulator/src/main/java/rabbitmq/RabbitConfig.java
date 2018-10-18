@@ -4,10 +4,11 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@SpringBootApplication
 public class RabbitConfig {
     static final String topicExchangeName = "spring-boot-exchange";
     static final String queueName = "licences";

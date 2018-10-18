@@ -1,4 +1,4 @@
-package be.kdg.processor.message.dom;
+package be.kdg.processor.dom;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Message {
-    private Long id;
+    private int id;
     private String licencePlate;
 }

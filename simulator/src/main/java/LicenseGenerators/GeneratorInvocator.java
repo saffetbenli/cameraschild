@@ -10,7 +10,9 @@ public class GeneratorInvocator{
     private LicensePlateGenerator messageGenerator;
 
     @Autowired
-    public GeneratorInvocator (@Qualifier("generateRandom") RandomGenerator randomGenerator, @Qualifier("generateFile") FileGenerator fileGenerator,@Value("${modus}") String modus){
+    public GeneratorInvocator (@Qualifier("generateRandom") RandomGenerator randomGenerator,
+                               @Qualifier("generateFile") FileGenerator fileGenerator,
+                               @Value("${modus}") String modus){
         if (modus.equalsIgnoreCase("random")) {
             this.messageGenerator = randomGenerator;
         }else if (modus.equalsIgnoreCase("file")) {

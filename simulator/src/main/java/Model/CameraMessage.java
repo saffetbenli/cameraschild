@@ -72,7 +72,6 @@ public class CameraMessage {
 
     @Override
     public String toString() {
-        //TODO: datum formateren, volgendes dd-MM-yyyy HH:mm:ss:SSS
-        return String.format("Camera Message %d %s %s", id++, licensePlate, localDateTime);
+        return String.format("CameraMessage %d %s %s", id++, licensePlate, localDateTime);
     }
 }

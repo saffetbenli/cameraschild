@@ -9,7 +9,7 @@ public class RandomGenerator implements LicensePlateGenerator  {
     Random random = new Random();
 
     public  int getRandomCameraId(){
-        int cameraId = random.nextInt(14) + 1;
+        int cameraId = random.nextInt(5) + 1;
         return cameraId;
     }
 

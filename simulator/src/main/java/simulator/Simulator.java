@@ -11,20 +11,22 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
 import sun.rmi.rmic.Generator;
 
+import javax.xml.bind.JAXBException;
+
 @Component
     public class Simulator {
         private MessageSender messageSender;
         private LicensePlateGenerator licensePlateGenerator;
 
         @Autowired
-        public Simulator(GeneratorInvocator generatorInvocator, MessageInvocator messageInvocator) {
+        public Simulator(GeneratorInvocator generatorInvocator, MessageInvocator messageInvocator) throws JAXBException {
             messageSender = messageInvocator.getMessageSender();
             licensePlateGenerator = generatorInvocator.getMessageGenerator();
 
             startSimulating();
         }
 
-        private void startSimulating() {
+        private void startSimulating() throws JAXBException {
             if (licensePlateGenerator instanceof RandomGenerator) {
                 while (true) {
                     messageSender.sendMessage(licensePlateGenerator.generate());
@@ -34,7 +36,6 @@ import sun.rmi.rmic.Generator;
                 while (true) {
                     messageSender.sendMessage(licensePlateGenerator.generate());
                 }
-
             }
         }
     }

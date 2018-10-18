@@ -10,7 +10,9 @@ public class MessageInvocator {
     private MessageSender messageSender;
 
     @Autowired
-    public MessageInvocator(@Qualifier("printCMD") CommandLineMessage commandLineMessage, @Qualifier("printQueue") QueueMessage queueMessage,@Value("$(messagePrint)") String printMessage) {
+    public MessageInvocator(@Qualifier("printCMD") CommandLineMessage commandLineMessage,
+                            @Qualifier("printQueue") QueueMessage queueMessage,
+                            @Value("$(messagePrint)") String printMessage){
         if (printMessage.equalsIgnoreCase("cmd")){
             this.messageSender = commandLineMessage;
         }else if (printMessage.equalsIgnoreCase("queue")){
