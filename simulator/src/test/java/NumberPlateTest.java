@@ -2,7 +2,6 @@ import LicenseGenerators.RandomGenerator;
 import org.junit.Test;
 
 import static org.springframework.test.util.AssertionErrors.assertEquals;
-import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 public class NumberPlateTest {
 

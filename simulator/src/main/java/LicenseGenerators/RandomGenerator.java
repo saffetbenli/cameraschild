@@ -1,10 +1,12 @@
 package LicenseGenerators;
 
+import Model.CameraMessage;
+
+import java.time.LocalDateTime;
 import java.util.Random;
 
-public class RandomGenerator {
+public class RandomGenerator implements LicensePlateGenerator  {
     Random random = new Random();
-    String randomLicense = "";
 
     public  int getRandomCameraId(){
         int cameraId = random.nextInt(14) + 1;
@@ -12,7 +14,7 @@ public class RandomGenerator {
     }
 
     public  int getRandomLicensePlateNumber() {
-        int licensePlate1 = random.nextInt(10) + 1 ;
+        int licensePlate1 = random.nextInt(9) + 1 ;
         return licensePlate1;
     }
 
@@ -21,9 +23,10 @@ public class RandomGenerator {
         return licensePlate4;
     }
 
-    public String getRandomLicensePlate(){
-        randomLicense = String.format("%d-%c%c%c-%d%d%d", getRandomLicensePlateNumber(), getRandomLicensePlateLetter(), getRandomLicensePlateLetter(),
-                getRandomLicensePlateLetter(), getRandomLicensePlateNumber(), getRandomLicensePlateNumber(), getRandomLicensePlateNumber()).toUpperCase();
-        return randomLicense;
+    @Override
+    public CameraMessage generate() {
+        return new CameraMessage(getRandomCameraId(),
+                String.format("%d-%c%c%c-%d%d%d", getRandomLicensePlateNumber(), getRandomLicensePlateLetter(), getRandomLicensePlateLetter(),
+                getRandomLicensePlateLetter(), getRandomLicensePlateNumber(), getRandomLicensePlateNumber(), getRandomLicensePlateNumber()).toUpperCase(),LocalDateTime.now());
     }
 }

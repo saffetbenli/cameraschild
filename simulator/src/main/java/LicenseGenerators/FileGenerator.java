@@ -1,27 +1,33 @@
 package LicenseGenerators;
 
+import Model.CameraMessage;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
         import java.io.FileNotFoundException;
         import java.io.FileReader;
         import java.io.IOException;
+import java.time.LocalDateTime;
 
-public class FileGenerator {
-    @Value("${csv.path}")
-    String csvFile;
-
+@Component
+public class FileGenerator implements LicensePlateGenerator{
+    @Value("${filePath}")
+    private String filePath;
     private int[] cameras;
     private String[] licences;
     private int[] frequencies;
+    private int quantityOfPlates = 0;
 
-    public void readLicencesFromFile() {
+    @Override
+    public CameraMessage generate() {
         BufferedReader br = null;
         String line = "";
         String cvsSplitBy = ",";
+        int quantity;
 
         try {
-            br = new BufferedReader(new FileReader(csvFile));
+            br = new BufferedReader(new FileReader(filePath));
             while ((line = br.readLine()) != null) {
                 int i = 0;
                 String[] licensePlate = line.split(cvsSplitBy);
@@ -36,8 +42,8 @@ public class FileGenerator {
                     }
                 }
                 i++;
-            }
 
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -51,21 +57,6 @@ public class FileGenerator {
                 }
             }
         }
+        return new CameraMessage(cameras[quantityOfPlates], frequencies[quantityOfPlates], licences[quantityOfPlates++], LocalDateTime.now());
     }
-
-     public int[] getCameras(){
-        readLicencesFromFile();
-        return cameras;
-    }
-
-    public String[] getLicences(){
-        readLicencesFromFile();
-        return licences;
-    }
-
-    public int[] getFrequency(){
-        readLicencesFromFile();
-        return frequencies;
-    }
-
 }
