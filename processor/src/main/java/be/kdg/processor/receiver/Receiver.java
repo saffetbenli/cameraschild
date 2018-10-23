@@ -1,34 +1,29 @@
 package be.kdg.processor.receiver;
 
-import be.kdg.processor.config.Config;
-import be.kdg.processor.dom.Message;
+import be.kdg.processor.Boete.EuroBoete;
+import be.kdg.processor.parsers.XMLParser;
+import be.kdg.processor.dom.CameraMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
+
 
 @Component
 public class Receiver {
     private static final Logger LOG = LoggerFactory.getLogger(Receiver.class);
-    private Config config;
-    private RabbitTemplate rabbitTemplate;
+    private XMLParser xmlParser = new XMLParser();
+    private CameraMessage cameraMessage;
+    private EuroBoete boete = new EuroBoete();
 
-
-    @Autowired
-    public Receiver(RabbitTemplate rabbitTemplate, Config config) {
-        this.rabbitTemplate = rabbitTemplate;
-        this.config = config;
+    public void receiveMessage(String message){
+        LOG.info("receiving the message ");
+        cameraMessage = xmlParser.readMessage(message);
+        boete.findOut(cameraMessage);
     }
 
-    public Message pullMessage() {
-        LOG.info("message received");
-        String message = rabbitTemplate.receiveAndConvert(config.getQUEUE_NAME()).toString();
-
-        //String splitMessage[] = message.toString().split(",");
-        Message cameraMessage = (Message) message;
-        LOG.info("Converted Message:" + cameraMessage);
-        // CameraMessage cameraMessage = new CameraMessage(Integer.parseInt(splitMessage[0]),splitMessage[1], LocalDateTime.parse(splitMessage[2]));
+    public CameraMessage getCameraMessage() {
         return cameraMessage;
     }
+
 }

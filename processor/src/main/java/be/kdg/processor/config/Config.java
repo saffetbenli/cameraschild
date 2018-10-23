@@ -1,19 +1,23 @@
 package be.kdg.processor.config;
 
-import be.kdg.sa.services.CameraServiceProxy;
-import be.kdg.sa.services.LicensePlateServiceProxy;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
-@Configuration
+@Component
 public class Config {
-    private String QUEUE_NAME = "licences";
+    private Environment env;
+    public int emBasisprijs = 50;
+    public int emBoetefactor = 2;
 
-    @Value("${em.basisprijs}")
-    private int emBasisprijs;
-    @Value("${em.boetefactor}")
-    private int emBoetefactor;
+    public Config() {
+    }
+
+    @Autowired
+    public Config(Environment env) {
+        this.env = env;
+    }
 
     public int getEmBasisprijs() {
         return emBasisprijs;
@@ -21,14 +25,5 @@ public class Config {
 
     public int getEmBoetefactor() {
         return emBoetefactor;
-    }
-
-    @Bean
-    public CameraServiceProxy cameraServiceProxy(){ return new CameraServiceProxy();}
-    @Bean
-    public LicensePlateServiceProxy licensePlateServiceProxy(){ return new LicensePlateServiceProxy();}
-
-    public String getQUEUE_NAME() {
-        return QUEUE_NAME;
     }
 }

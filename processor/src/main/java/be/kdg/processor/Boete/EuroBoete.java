@@ -1,49 +1,59 @@
 package be.kdg.processor.Boete;
 
 import be.kdg.processor.config.Config;
-import be.kdg.processor.dom.Message;
-import be.kdg.processor.receiver.Receiver;
+import be.kdg.processor.dom.CameraMessage;
+
 import be.kdg.processor.services.CameraService;
 import be.kdg.processor.services.LicenseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EuroBoete implements Boete {
+
     private static final Logger LOG = LoggerFactory.getLogger(SnelheidsBoete.class);
     private CameraService cameraService;
     private LicenseService licenseService;
-    private Receiver receiver;
+    private int minEuro;
+    private int huidigeEuronorm;
+    private boolean magRijden;
     private Config config;
 
-    public EuroBoete(CameraService cameraService, LicenseService licenseService, Receiver receiver, Config config) {
+
+    public EuroBoete() {
+        cameraService = new CameraService();
+        licenseService = new LicenseService();
+        config = new Config();
+    }
+
+    @Autowired
+    public EuroBoete(CameraService cameraService, LicenseService licenseService, Config config) {
         this.cameraService = cameraService;
         this.licenseService = licenseService;
-        this.receiver = receiver;
         this.config = config;
     }
 
-    @Override
-    public boolean findOut() {
-        Message message = receiver.pullMessage();
-        int minEuro = cameraService.getEuro(message.getId());
-        int huidigeEuronorm = licenseService.getEuro(message.getLicencePlate());
+    public boolean findOut(CameraMessage cameraMessage) {
+            minEuro =  cameraService.getEuro(cameraMessage.getCameraId());
+            huidigeEuronorm = licenseService.getEuro(cameraMessage.getLicensePlate());
 
-        if (huidigeEuronorm == 0) {
-            LOG.info("Geen lage emissiezone");
-            return false;
-        } else if (minEuro > huidigeEuronorm) {
-            LOG.info("Auto met nummerplaat " + message.getLicencePlate() + " is NIET geschikt om in deze zone te rijden.");
-            LOG.info("Gedetecteerde eurozone: "+ huidigeEuronorm+".Boete bedraagt:€ "+ berekenBoete());
-
-            return true;
-        } else {
-            LOG.info("Auto is geschikt om in deze zone te rijden");
-            return false;
-        }
+            if (minEuro == 0) {
+                LOG.info("Geen lage emissiezone");
+                magRijden = true;
+            } else if (minEuro > huidigeEuronorm) {
+                LOG.info("Auto met nummerplaat " + cameraMessage.getLicensePlate() + " is NIET geschikt om in deze zone te rijden.");
+                LOG.info("Gedetecteerde eurozone: "+ huidigeEuronorm+". Boete bedraagt:€ " + berekenBoete());
+                magRijden = false;
+            } else {
+                LOG.info("Auto is geschikt om in deze zone te rijden");
+                magRijden = true;
+            }
+            return magRijden;
     }
 
-    public double berekenBoete() {
-        double boete = (config.getEmBasisprijs() * config.getEmBoetefactor());
-        return boete;
+    public int berekenBoete(){
+        return config.getEmBasisprijs() * config.getEmBoetefactor();
     }
 }

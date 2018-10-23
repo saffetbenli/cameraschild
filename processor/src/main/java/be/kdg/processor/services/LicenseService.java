@@ -1,10 +1,9 @@
 package be.kdg.processor.services;
 
-import be.kdg.processor.Json.JsonParser;
+import be.kdg.processor.parsers.JsonParser;
 import be.kdg.sa.services.LicensePlateServiceProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.json.JsonObject;
@@ -16,9 +15,13 @@ public class LicenseService {
     private LicensePlateServiceProxy licensePlateServiceProxy;
     private JsonParser parser;
     private int euro;
+    private JsonObject object;
 
+    public LicenseService() {
+        licensePlateServiceProxy = new LicensePlateServiceProxy();
+        parser = new JsonParser();
+    }
 
-    @Autowired
     public LicenseService(LicensePlateServiceProxy licensePlateServiceProxy, JsonParser parser) {
         this.licensePlateServiceProxy = licensePlateServiceProxy;
         this.parser = parser;
@@ -26,8 +29,8 @@ public class LicenseService {
 
     public int getEuro(String license) {
         try {
-            JsonObject object = parser.convert(licensePlateServiceProxy.get(license));
-            euro = object.getInt("euroNumber", 0);
+            object = parser.convert(licensePlateServiceProxy.get(license));
+            euro = object.getInt("euroNumber");
         } catch (IOException e) {
             e.printStackTrace();
             LOG.error("License not found!", e);

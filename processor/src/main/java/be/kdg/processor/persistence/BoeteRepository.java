@@ -1,28 +1,28 @@
 package be.kdg.processor.persistence;
 
 import be.kdg.processor.dom.Boete;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Repository
 public class BoeteRepository {
-
-    private final ConcurrentHashMap<Integer, Boete> greetingsMap;
+    private final ConcurrentHashMap<Long, Boete> boetesMap;
 
     public BoeteRepository() {
-        greetingsMap = new ConcurrentHashMap<Integer, Boete>();
+        boetesMap = new ConcurrentHashMap<Long, Boete>();
     }
 
     public Boete save(Boete boete) {
-        greetingsMap.put(boete.getId(), boete);
+        boetesMap.put(boete.getId(), boete);
         return boete;
     }
 
     public Optional<Boete> findOne(Long id){
-        if(greetingsMap.contains(id)){
-            return Optional.of(greetingsMap.get(id));
+        if(boetesMap.contains(id)){
+            return Optional.of(boetesMap.get(id));
         }
         return Optional.empty();
     }
-
 }

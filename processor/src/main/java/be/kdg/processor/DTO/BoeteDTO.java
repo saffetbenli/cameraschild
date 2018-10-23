@@ -12,9 +12,34 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 public class BoeteDTO {
     @NotEmpty
-    private int id;
+    private Long id;
     @NotEmpty
     private String boeteType;
     @NotEmpty
     private String bestuurder;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getBoeteType() {
+        return boeteType;
+    }
+
+    public String getBestuurder() {
+        return bestuurder;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setBoeteType(String boeteType) {
+        this.boeteType = boeteType;
+    }
+
+    public void setBestuurder(String bestuurder) {
+        this.bestuurder = bestuurder;
+    }
 }

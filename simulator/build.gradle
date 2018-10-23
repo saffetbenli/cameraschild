@@ -24,7 +24,7 @@ repositories {
 }
 
 bootJar {
-    baseName = 'gs-messaging-rabbitmq'
+    baseName = 'gs-messaging-be.kdg.simulator.rabbitmq'
     version =  '0.1.0'
 }
 
@@ -36,6 +36,7 @@ dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
 	implementation('org.springframework.boot:spring-boot-starter-validation')
 	implementation('org.springframework.boot:spring-boot-starter-web')
+
 	runtimeOnly('org.springframework.boot:spring-boot-devtools')
 	compileOnly('org.springframework.boot:spring-boot-configuration-processor')
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
